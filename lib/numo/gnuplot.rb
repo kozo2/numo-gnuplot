@@ -53,6 +53,32 @@ class Gnuplot
       ["image/svg+xml",svg]
     end
   end
+  
+  class Rubydown
+    def plot(*args)
+      super(*args)
+      self
+    end
+
+    def splot(*args)
+      super(*args)
+      self
+    end
+
+    def _plot_splot(*args)
+      @tempfile = Tempfile.open(['plot', '.png'])
+      set terminal: 'png'
+      set output: @tempfile.path
+      super(*args)
+    end
+
+    def to_html
+      img_b64 = Base64.encode64(File.read(@tempfile))
+      <<-HTML
+        <img src='data:image/png;base64,#{img_b64}' />
+      HTML
+    end
+  end
 
   def initialize(path:"gnuplot", persist:true)
     @path = path
