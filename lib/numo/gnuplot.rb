@@ -56,13 +56,6 @@ class Gnuplot
   
   class Rubydown
     
-    def initialize(&block)
-      if block.nil?
-        raise ArgumentError,"block is needed"
-      end
-      @block = block
-    end
-    
     def plot(*args)
       super(*args)
       self
